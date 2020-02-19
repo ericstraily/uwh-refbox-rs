@@ -459,7 +459,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
         let white_time_list = new_button("WHITE PENALTIES", &["white"], None);
         let black_time_list = new_button("BLACK PENALTIES", &["black"], None);
-        let penalty_conf_cancel = new_button("CANCEL", &["red"], None);
+        //let penalty_conf_cancel = new_button("CANCEL", &["red"], None);
         let penalty_conf_new = new_button("NEW", &["blue"], None);
         let penalty_conf_start = new_button("START /\nDONE", &["green"], None);
         let penalty_conf_white_timeout = new_button("WHITE\nTIMEOUT", &["white"], None);
@@ -469,7 +469,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         time_penalty_conf_layout.attach(&white_time_list, 0, 0, 6, 7);
         time_penalty_conf_layout.attach(&black_time_list, 6, 0, 6, 7);
         time_penalty_conf_layout.attach(&penalty_conf_new, 0, 7, 4, 2);
-        time_penalty_conf_layout.attach(&penalty_conf_cancel, 4, 7, 4, 2);
+        //time_penalty_conf_layout.attach(&penalty_conf_cancel, 4, 7, 4, 2);
         time_penalty_conf_layout.attach(&penalty_conf_start, 8, 7, 4, 2);
         time_penalty_conf_layout.attach(&penalty_conf_white_timeout, 0, 9, 3, 2);
         time_penalty_conf_layout.attach(&penalty_conf_referee_timeout, 3, 9, 6, 2);
@@ -589,14 +589,18 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             }
         });
 
+        let penalty_1min_ = penalty_1min.clone();
+        let penalty_2min_ = penalty_2min.clone();
+        let penalty_5min_ = penalty_5min.clone();
+
         penalty_dismiss.connect_clicked(move |b| {
             if b.get_active() {
-                penalty_1min.set_active(false);
-                penalty_2min.set_active(false);
-                penalty_5min.set_active(false);
-            } else if !penalty_1min.get_active()
-                && !penalty_2min.get_active()
-                && !penalty_5min.get_active()
+                penalty_1min_.set_active(false);
+                penalty_2min_.set_active(false);
+                penalty_5min_.set_active(false);
+            } else if !penalty_1min_.get_active()
+                && !penalty_2min_.get_active()
+                && !penalty_5min_.get_active()
             {
                 b.set_active(true);
             }
@@ -1023,12 +1027,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         let layout_stack_ = layout_stack.clone();
         edit_game_parameters_submit
             .connect_clicked(move |_| layout_stack_.set_visible_child(&main_layout_));
-
-        let main_layout_ = main_layout.clone();
-        let layout_stack_ = layout_stack.clone();
-        penalty_conf_cancel
-            .connect_clicked(move |_| layout_stack_.set_visible_child(&main_layout_));
-
+        /*
+                let main_layout_ = main_layout.clone();
+                let layout_stack_ = layout_stack.clone();
+                penalty_conf_cancel
+                    .connect_clicked(move |_| layout_stack_.set_visible_child(&main_layout_));
+        */
         let layout_stack_ = layout_stack.clone();
         penalty_conf_start.connect_clicked(move |_| layout_stack_.set_visible_child(&main_layout));
 
@@ -1085,8 +1089,13 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
         // move to time_penalty_add_layout
         let layout_stack_ = layout_stack.clone();
-        penalty_conf_new
-            .connect_clicked(move |_| layout_stack_.set_visible_child(&penalty_add_layout));
+        penalty_conf_new.connect_clicked(move |_| {
+            penalty_1min.set_active(true);
+            penalty_2min.set_active(false);
+            penalty_5min.set_active(false);
+            penalty_dismiss.set_active(false);
+            layout_stack_.set_visible_child(&penalty_add_layout);
+        });
 
         // move to time_penalty_conf_layout
         let time_penalty_conf_layout_ = time_penalty_conf_layout.clone();
