@@ -24,6 +24,7 @@ pub enum GamePeriod {
     Overtime,
     PreSuddenDeath,
     SuddenDeath,
+    EndGame,
 }
 
 pub enum TimeoutState {
